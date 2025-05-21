@@ -11,6 +11,7 @@ class Axis(Element):
     def __init__(self: Self) -> None:
         super().__init__()
         self._cells: List[Cell] = []
+        self.cellspacing: int = 0
 
     def __len__(self: Self) -> int:
         return len(self._cells)

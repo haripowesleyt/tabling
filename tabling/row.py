@@ -8,12 +8,16 @@ class Row(Axis):
     """Represents a table row."""
 
     def __str__(self: Self) -> str:
+        """Generates a visual representation of the row."""
         self._normalize()
         cells_lines = tuple(s.split("\n") for s in map(str, self._cells))
         row_lines = [""] * max(map(len, cells_lines))
-        for cell_lines in cells_lines:
-            for index, line in enumerate(cell_lines):
-                row_lines[index] += line
+        number_of_cells = len(cells_lines)
+        for cell_index, cell_lines in enumerate(cells_lines):
+            for line_index, line in enumerate(cell_lines):
+                if cell_index < number_of_cells:
+                    line += " " * self.cellspacing
+                row_lines[line_index] += line
         return self._render("\n".join(row_lines))
 
     def _normalize(self: Self) -> None:

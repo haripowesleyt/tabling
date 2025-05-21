@@ -11,7 +11,7 @@ class Column(Axis):
     def __str__(self: Self) -> str:
         self = deepcopy(self)  # pylint: disable=self-cls-assignment
         self.normalize()
-        return self._render("\n".join(map(str, self._cells)))
+        return self._render(("\n" + "\n" * self.cellspacing).join(map(str, self._cells)))
 
     def normalize(self: Self) -> None:
         """Sets uniform, fixed spacing values to cells."""
