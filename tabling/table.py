@@ -43,17 +43,14 @@ class Table(Element):
         for row in self._rows:
             any_left_border = any_left_border or bool(row.border.left.style)
             any_right_border = any_right_border or bool(row.border.right.style)
-        for index, row in enumerate(self._rows):
+        for row in self._rows:
             row.font += self.font
-            if index > 0:
-                row.margin.top = max(row.margin.top, self.rowspacing)
-            for cell in tuple(row)[:-1]:
-                cell.margin.right = max(cell.margin.right, self.colspacing)
+            row.cellspacing = max(row.cellspacing, self.colspacing)
             if any_left_border and not row.border.left.style:
                 row.padding.left += 1
             if any_right_border and not row.border.right.style:
                 row.padding.right += 1
-        return self._render("\n".join(map(str, self._rows)))
+        return self._render(("\n" + "\n" * self.rowspacing).join(map(str, self._rows)))
 
     def add_row(self: Self, entries: Iterable[Any]) -> None:
         """Adds a row."""
