@@ -36,7 +36,8 @@ class Table(Element):
             raise IndexError(f"Row index {index} is out of range.") from exc
 
     def __str__(self: Self) -> str:
-        self = deepcopy(self)  # pylint: disable=self-cls-assignment
+        if self.preserve:
+            self = deepcopy(self)  # pylint: disable=self-cls-assignment
         for column in self._columns:
             column.normalize()
         any_left_border = any_right_border = False
@@ -50,6 +51,7 @@ class Table(Element):
                 row.padding.left += 1
             if any_right_border and not row.border.right.style:
                 row.padding.right += 1
+            row.preserve = False
         return self._render(("\n" + "\n" * self.rowspacing).join(map(str, self._rows)))
 
     def add_row(self: Self, entries: Iterable[Any]) -> None:

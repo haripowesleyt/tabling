@@ -9,7 +9,8 @@ class Column(Axis):
     """Represents a table column."""
 
     def __str__(self: Self) -> str:
-        self = deepcopy(self)  # pylint: disable=self-cls-assignment
+        if self.preserve:
+            self = deepcopy(self)  # pylint: disable=self-cls-assignment
         self.normalize()
         return self._render(("\n" + "\n" * self.cellspacing).join(map(str, self._cells)))
 

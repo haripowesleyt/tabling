@@ -13,6 +13,7 @@ class Element:  # pylint: disable=too-few-public-methods
         self.font: Font = Font(style=None, color=None)
         self.margin: Margin = Margin(left=0, right=0, top=0, bottom=0)
         self.padding: Padding = Padding(left=0, right=0, top=0, bottom=0)
+        self.preserve: bool = True
 
     def _render(self: Self, text: str) -> str:
         """Generates a visual representation of the element."""

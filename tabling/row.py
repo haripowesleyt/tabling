@@ -1,5 +1,6 @@
 """Defines the `Row` class."""
 
+from copy import deepcopy
 from typing import Self
 from .axis import Axis
 
@@ -9,6 +10,8 @@ class Row(Axis):
 
     def __str__(self: Self) -> str:
         """Generates a visual representation of the row."""
+        if self.preserve:
+            self = deepcopy(self)  # pylint: disable=self-cls-assignment
         self._normalize()
         cells_lines = tuple(s.split("\n") for s in map(str, self._cells))
         row_lines = [""] * max(map(len, cells_lines))
