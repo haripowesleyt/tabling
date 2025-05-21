@@ -18,7 +18,7 @@ class Row(Axis):
         number_of_cells = len(cells_lines)
         for cell_index, cell_lines in enumerate(cells_lines):
             for line_index, line in enumerate(cell_lines):
-                if cell_index < number_of_cells:
+                if cell_index < number_of_cells - 1:
                     line += " " * self.cellspacing
                 row_lines[line_index] += line
         return self._render("\n".join(row_lines))
