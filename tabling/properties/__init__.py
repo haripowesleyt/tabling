@@ -5,3 +5,4 @@ from .border import Border
 from .font import Font
 from .margin import Margin
 from .padding import Padding
+from .text import Text
