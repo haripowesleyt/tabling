@@ -8,10 +8,10 @@ from .element import Element
 class Axis(Element):
     """Represents an axis of cells."""
 
-    def __init__(self: Self) -> None:
+    def __init__(self: Self, cellspacing: int = 0) -> None:
         super().__init__()
         self._cells: List[Cell] = []
-        self.cellspacing: int = 0
+        self.cellspacing: int = cellspacing
 
     def __len__(self: Self) -> int:
         return len(self._cells)
