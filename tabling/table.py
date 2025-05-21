@@ -224,6 +224,11 @@ class Table(Element):
         with open(filepath, "w", encoding="utf-8") as json_file:
             json.dump({key: contents} if key else contents, json_file, indent=2)
 
+    def export_txt(self: Self, filepath: str) -> None:
+        """Exports plain, rendered table to plain/txt file."""
+        with open(filepath, "w", encoding="utf-8") as txt_file:
+            txt_file.write(unstyle(str(self)))
+
     def _get_row(self: Self, index: int) -> Row:
         if abs(index) > len(self._rows):
             raise IndexError(f"Row index {index} is out of range.")
