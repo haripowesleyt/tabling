@@ -25,14 +25,21 @@ class Row(Axis):
 
     def _normalize(self: Self) -> None:
         max_margin_top = max_margin_bottom = max_padding_top = max_padding_bottom = max_height = 0
+        any_top_border = any_bottom_border = False
         for cell in self._cells:
             max_margin_top = max(max_margin_top, cell.margin.top)
             max_margin_bottom = max(max_margin_bottom, cell.margin.bottom)
             max_padding_top = max(max_padding_top, cell.padding.top)
             max_padding_bottom = max(max_padding_bottom, cell.padding.bottom)
             max_height = max(max_height, cell.height)
+            any_top_border = any_top_border or bool(cell.border.top.style)
+            any_bottom_border = any_bottom_border or bool(cell.border.bottom.style)
         for cell in self._cells:
             cell.margin.block = max_margin_top, max_margin_bottom
             cell.padding.block = max_padding_top, max_padding_bottom
             cell.height = max_height
             cell.font += self.font
+            if any_top_border and not cell.border.top.style:
+                cell.padding.top += 1
+            if any_bottom_border and not cell.border.bottom.style:
+                cell.padding.bottom += 1
