@@ -21,7 +21,7 @@ class Axis(Element):
 
     def __getitem__(self: Self, index: Union[int, slice]):
         if isinstance(index, slice):
-            return self._cells[index.start or 0: index.stop or len(self._cells): index.step or 1]
+            return self._cells[index.start or 0 : index.stop or len(self._cells) : index.step or 1]
         try:
             return self._cells[index]
         except IndexError as exc:

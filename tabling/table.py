@@ -31,7 +31,7 @@ class Table(Element):
 
     def __getitem__(self: Self, index: Union[int, slice]):
         if isinstance(index, slice):
-            return self._rows[index.start or 0: index.stop or len(self._rows): index.step or 1]
+            return self._rows[index.start or 0 : index.stop or len(self._rows) : index.step or 1]
         try:
             return self._rows[index]
         except IndexError as exc:
