@@ -18,6 +18,6 @@ class Element:  # pylint: disable=too-few-public-methods
     def _render(self: Self, text: str) -> str:
         """Generates a visual representation of the element."""
         text = self.padding.apply(text)
-        text = self.border.apply(text)
         text = self.background.apply(text)
+        text = self.border.apply(text)
         return self.margin.apply(text)
