@@ -74,4 +74,6 @@ class Text:  # pylint: disable=too-many-instance-attributes, too-few-public-meth
         if not self.visible:
             for char in text:
                 text = text.replace(char, " ") if char != "\n" else text
-        return text
+
+        max_width = max(map(len, (text_lines := text.split("\n"))))
+        return "\n".join((line.ljust(max_width) for line in text_lines))
