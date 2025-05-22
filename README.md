@@ -156,11 +156,11 @@ print(table)
 
 ## FAQ
 
-1. **What is the format for RGB colors?**\
-`rrr,ggg,bbb`
+1. **What is the format for RGB and HEXcolors?**\
+Use `rrr,ggg,bbb` for RGB and `#rrggbb` or `#rgb` for HEX.
 
-2. **What is the format for HEX colors?**\
-`#rrggbb` or `#rgb`
+2. **How can I change a cell value?**\
+Use `table[row_index][column_index].value = new_value`
 
 3. **How do I set a column width?**\
 Set the `cell.width` of any cell within the column to the desired column width.
@@ -173,35 +173,38 @@ Use your OS's native terminal instead of an IDE terminal.
 
 
 6. **How to make `table.sort_rows` exclude the first row?**\
-Use argument `start=1`.
+Use argument `start=1` to exclude first and `stop=-1` to exclude last.
 
-7. **How to make `table.sort_rows` exclude the last row?**\
-Use argument `stop=-1`
+7. **Why is my table/row font color not working?**
+Font color is rendered based on specificity. Cells have the highest specificity followed by rows, followed by the table. This means that table font color is only displayed on a row that has no font color itself. Similarily, row font color is only displayed in cells, within the row, that have no font color themselves.
 
 8. **How to fix row lines leaking to next line for small terminal window?**\
-Resize, and/or zoom out, the terminal window to fit the rows.
+Resize, and/or zoom out, the terminal window to fit the rows. Alternatively, use `table.export_txt(filepath)` to export your table to TXT format and then use a GUI text edito to view your table. **NB:** TXT exporting does not export table styles such as font and background properties.
 
 9. **Why do borders overlap when I use emojis?**\
 Emojis, such as smileys, consists of two parts: structure and color. Python takes these emojis as having a length of 1, but most terminals take them as having a length of 2. Thus, terminals use two spaces to render the emoji while Python had reserved only one. Thus the overlaps.
 
+10. **How do I make Tabling even faster when rendering the table?**  
+Set the flag `table.preserve = False`. **Note that** turning off preservation means that normalization of elements is to be done on the actual elements and not copies like with `table.preserve = True`. This may cause problems if you want to reprint the table later with new cell values and cusomizations. Only set `table.preserve = False` when you want to print the table once and nothing more!
+
 ## Templates
 These are pre-written code blocks used to quickly, and effectively, customize a table with a **commonly used table styles**.
 
-1. **plain**  
+1. **Plain**  
     ![template-plain](https://github.com/user-attachments/assets/4b584de6-e097-4511-a9b2-fe629334f8cd)
 
     ```python
     # No customization
     ```
 
-2. **simple**  
+2. **Simple**  
     ![template-simple](https://github.com/user-attachments/assets/dfad33e7-48a8-4ee7-a984-c6ebba8c3935)
 
     ```python
     table.border.style = "single"
     ```
 
-3. **headed**  
+3. **Headed**  
     ![template-headed](https://github.com/user-attachments/assets/73cca6e9-e681-46e4-896b-3352752b5b7b)
 
     ```python
@@ -213,7 +216,7 @@ These are pre-written code blocks used to quickly, and effectively, customize a 
     table[0].border.bottom.style = BORDER_STYLE
     ```
 
-4. headed & footed  
+4. **Headed & Footed**  
     ![template-headed-footed](https://github.com/user-attachments/assets/0a4afa53-854a-4b63-a581-bd58494477df)
 
     ```python
@@ -226,7 +229,7 @@ These are pre-written code blocks used to quickly, and effectively, customize a 
     table[-1].border.top.style = BORDER_STYLE
     ```
 
-5. grid  
+5. **Grid**  
     ![template-grid](https://github.com/user-attachments/assets/aadb93b7-bda4-4e76-8eb6-d7596f7aa433)
 
     ```python
@@ -241,7 +244,7 @@ These are pre-written code blocks used to quickly, and effectively, customize a 
             cell.border.style = BORDER_STYLE
     ```
 
-6. collapsed grid  
+6. **Grid-collapsed**  
     ![template-collapsed-grid](https://github.com/user-attachments/assets/a0273a3e-1164-46f0-bd23-5a32aa8d69b2)
 
     ```python
@@ -260,7 +263,7 @@ These are pre-written code blocks used to quickly, and effectively, customize a 
         cell.border.bottom.style = BORDER_STYLE
     ```
 
-7. staked  
+7. **Staked**  
     ![template-stacked](https://github.com/user-attachments/assets/51c23e1b-ce66-4cd7-95fe-98071f641853)
 
     ```python
@@ -268,7 +271,7 @@ These are pre-written code blocks used to quickly, and effectively, customize a 
         row.border.style = "single"
     ```
 
-8. stacked-collapsed  
+8. **Stacked-collapsed**  
     ![template-striped](https://github.com/user-attachments/assets/c8ca3399-47a8-4543-b8d6-13a593068657)
 
     ```python
@@ -285,7 +288,7 @@ These are pre-written code blocks used to quickly, and effectively, customize a 
     table[0].border.top.style = BORDER_STYLE
     ```
 
-9. queued  
+9. **Queued**  
     ![template-queued](https://github.com/user-attachments/assets/804406ba-63a5-4c04-a05e-aec47d320415)
 
     ```python
@@ -308,31 +311,31 @@ These are pre-written code blocks used to quickly, and effectively, customize a 
         cell.border.bottom.style = BORDER_STYLE
     ```
 
-  10. queued-collapsed  
-    ![queued-collapsed](https://github.com/user-attachments/assets/9bd756d4-3645-4995-964f-50912d5a9473)
+  10. **Queued-collapsed**  
+        ![queued-collapsed](https://github.com/user-attachments/assets/9bd756d4-3645-4995-964f-50912d5a9473)
 
-    ```python
-    # Configuration
-    BORDER_STYLE = "single"
-    ROW_SPACING = 0
-    COLUMN_SPACING = 0
-    
-    # Customization
-    table.rowspacing = 0  # !important
-    table.colspacing = COLUMN_SPACING
-    for cell in table[0]:
-        cell.border.top.style = BORDER_STYLE
-    for row in table:
-        for cell in row:
-            cell.border.left.style = BORDER_STYLE
-            cell.border.right.style = BORDER_STYLE
-        row[0].padding.block = ROW_SPACING // 2, ROW_SPACING - (ROW_SPACING // 2)
-    for cell in table[-1]:
-        cell.border.bottom.style = BORDER_STYLE
-    ```
+        ```python
+        # Configuration
+        BORDER_STYLE = "single"
+        ROW_SPACING = 0
+        COLUMN_SPACING = 0
 
-11. checkered  
-![template-checkered](https://github.com/user-attachments/assets/dfa0fc80-3059-4c04-ba35-cf9a0a4e27c8)
+        # Customization
+        table.rowspacing = 0  # !important
+        table.colspacing = COLUMN_SPACING
+        for cell in table[0]:
+            cell.border.top.style = BORDER_STYLE
+        for row in table:
+            for cell in row:
+                cell.border.left.style = BORDER_STYLE
+                cell.border.right.style = BORDER_STYLE
+            row[0].padding.block = ROW_SPACING // 2, ROW_SPACING - (ROW_SPACING // 2)
+        for cell in table[-1]:
+            cell.border.bottom.style = BORDER_STYLE
+        ```
+
+11. **Checkered**  
+    ![template-checkered](https://github.com/user-attachments/assets/dfa0fc80-3059-4c04-ba35-cf9a0a4e27c8)
 
     ```python
     # Configuration
@@ -363,7 +366,7 @@ Like HTML, **Tabling** enables you to create structured, grid-based user interfa
 
 This section showcases real-world examples and source code demonstrating how Tabling can be used to build console-based UIs and structured layouts.
 
-1. chess board  
+1. **Chess Board**  
     ![interface-chess-board](https://github.com/user-attachments/assets/b2863c8f-4e97-4838-9e1b-aa65348dff79)
 
     ```python
@@ -394,7 +397,7 @@ This section showcases real-world examples and source code demonstrating how Tab
     print(chess_board)
     ```
 
-2. calculator  
+2. **Calculator**  
     ![interface-calculator](https://github.com/user-attachments/assets/a3a791ea-da08-48a1-b22b-605e46b078f9)
 
     ```python
@@ -430,7 +433,7 @@ This section showcases real-world examples and source code demonstrating how Tab
     print(calculator)
     ```
 
-3. phone  
+3. **Phone**  
     ![interface-phone](https://github.com/user-attachments/assets/1551b2c7-c75c-474f-823d-9df34ff8e801)
 
     ```python
@@ -470,7 +473,7 @@ This section showcases real-world examples and source code demonstrating how Tab
     print(phone)
     ```
 
-4. barcode  
+4. **Barcode**  
     ![interface-barcode](https://github.com/user-attachments/assets/97d9ce75-4797-4384-babb-993086c75b51)
 
     ```python
@@ -494,7 +497,7 @@ This section showcases real-world examples and source code demonstrating how Tab
     print(barcode)
     ```
 
-5. menu  
+5. **Menu**  
     ![interface-menu](https://github.com/user-attachments/assets/569ab58c-8b4c-4171-bd6e-98f13340e134)
 
     ```python    
@@ -516,7 +519,7 @@ This section showcases real-world examples and source code demonstrating how Tab
     print(f"You chose: {menu[option-1][1]}")
     ```
 
-6. calendar  
+6. **Calendar**  
     ![interface-calendar](https://github.com/user-attachments/assets/5a2aff4e-5c04-479d-883f-5d18d42fd94f)
 
     ```python
@@ -550,7 +553,7 @@ This section showcases real-world examples and source code demonstrating how Tab
     ```
 
 
-7. form  
+7. **Form**  
     ![interface-form](https://github.com/user-attachments/assets/60fd6cbc-20b5-4960-9c4f-71dd93a08d6d)
 
     ```python
@@ -588,7 +591,7 @@ This section showcases real-world examples and source code demonstrating how Tab
     print(form)
     ```
 
-8. navigation bar  
+8. **Navigation Bar**  
     ![interface-navigation-bar](https://github.com/user-attachments/assets/7a88be1f-7397-4dbb-9c1d-e57f0213cf52)
 
     ```python
@@ -623,7 +626,7 @@ This section showcases real-world examples and source code demonstrating how Tab
 
     print(navbar)
     ```
-9. bar graph  
+9. **Bar Graph**  
     ![interface-bar-graph](https://github.com/user-attachments/assets/4b172d55-de97-4169-8064-647fb778c0aa)
 
     ```python
@@ -659,7 +662,7 @@ This section showcases real-world examples and source code demonstrating how Tab
     print(graph)
     ```
 
-10. flag  
+10. **Flag**  
     ![interface-flag](https://github.com/user-attachments/assets/7da56463-c676-43d4-b2ff-c6fbc1de9514)
 
     ```python
