@@ -156,32 +156,32 @@ print(table)
 
 ## FAQ
 
-1. **What is the format for RGB and HEXcolors?**\
+1. **What is the format for RGB and HEXcolors?**  
 Use `rrr,ggg,bbb` for RGB and `#rrggbb` or `#rgb` for HEX.
 
-2. **How can I change a cell value?**\
+2. **How can I change a cell value?**  
 Use `table[row_index][column_index].value = new_value`
 
-3. **How do I set a column width?**\
+3. **How do I set a column width?**  
 Set the `cell.width` of any cell within the column to the desired column width.
 
-4. **How do I set a row height?**\
+4. **How do I set a row height?**  
 Set the `cell.height` of any cell within the row to the desired row height.
 
-5. **Why are colors not displaying as expected?**\
+5. **Why are colors not displaying as expected?**  
 Use your OS's native terminal instead of an IDE terminal.
 
 
-6. **How to make `table.sort_rows` exclude the first row?**\
+6. **How to make `table.sort_rows` exclude the first row?**  
 Use argument `start=1` to exclude first and `stop=-1` to exclude last.
 
 7. **Why is my table/row font color not working?**
 Font color is rendered based on specificity. Cells have the highest specificity followed by rows, followed by the table. This means that table font color is only displayed on a row that has no font color itself. Similarily, row font color is only displayed in cells, within the row, that have no font color themselves.
 
-8. **How to fix row lines leaking to next line for small terminal window?**\
+8. **How to fix row lines leaking to next line for small terminal window?**  
 Resize, and/or zoom out, the terminal window to fit the rows. Alternatively, use `table.export_txt(filepath)` to export your table to TXT format and then use a GUI text edito to view your table. **NB:** TXT exporting does not export table styles such as font and background properties.
 
-9. **Why do borders overlap when I use emojis?**\
+9. **Why do borders overlap when I use emojis?**  
 Emojis, such as smileys, consists of two parts: structure and color. Python takes these emojis as having a length of 1, but most terminals take them as having a length of 2. Thus, terminals use two spaces to render the emoji while Python had reserved only one. Thus the overlaps.
 
 10. **How do I make Tabling even faster when rendering the table?**  
@@ -366,74 +366,215 @@ Like HTML, **Tabling** enables you to create structured, grid-based user interfa
 
 This section showcases real-world examples and source code demonstrating how Tabling can be used to build console-based UIs and structured layouts.
 
-1. **Chess Board**  
-    ![interface-chess-board](https://github.com/user-attachments/assets/b2863c8f-4e97-4838-9e1b-aa65348dff79)
+1. **Menu**  
+    ![interface-menu](https://github.com/user-attachments/assets/569ab58c-8b4c-4171-bd6e-98f13340e134)
+
+    ```python    
+    from tabling import Table
+
+    question = "What's your favorite programming language?"
+    choices = ("Python", "C", "C++", "Javascript")
+    options = (f"{i}." for i in range(1, len(choices) + 1))
+
+    menu = Table(colspacing=1, rowspacing=0)
+    menu.add_column(options)
+    menu.add_column(choices)
+    menu.padding.left = 2
+
+    print(question)
+    print(menu)
+
+    option = int(input("> "))
+    print(f"You chose: {menu[option-1][1]}")
+    ```
+
+2. **Barcode**  
+    ![interface-barcode](https://github.com/user-attachments/assets/97d9ce75-4797-4384-babb-993086c75b51)
 
     ```python
     from tabling import Table
+
+    barcode = Table(colspacing=1, rowspacing=0)
+    barcode.add_row("")
+    barcode.add_row((6, "", 0, 0, 1, 0, 8, 7, ""))
+    barcode[0][0].height = 10
+    barcode[0][1].border.right.style = "double"
+    barcode[1][1].border.right.style = "double"
+    barcode[0][2].border.left.style = "solid"
+    barcode[0][3].border.left.style = "single"
+    barcode[0][4].border.left.style = "solid"
+    barcode[0][5].border.left.style = "single"
+    barcode[0][6].border.left.style = "solid"
+    barcode[0][7].border.left.style = "solid"
+    barcode[0][8].border.left.style = "double"
+    barcode[1][8].border.left.style = "double"
     
-    chess_board = Table(colspacing=0, rowspacing=0)
+    print(barcode)
+    ```
+
+3. **Calendar**  
+    ![interface-calendar](https://github.com/user-attachments/assets/5a2aff4e-5c04-479d-883f-5d18d42fd94f)
+
+    ```python
+    from tabling import Table
+
+    calendar = Table(colspacing=0, rowspacing=0)
     
-    for _ in range(8):
-        chess_board.add_row(("",)*8)
+    calendar.add_row(("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
+    calendar.add_row(("", "", "", "", 1, 2, 3))
+    calendar.add_row((4, 5, 6, 7, 8, 9, 10))
+    calendar.add_row((11, 12, 13, 14, 15, 16, 17))
+    calendar.add_row((18, 19, 20, 21, 22, 23, 24))
+    calendar.add_row((25, 26, 27, 28, 29, 30, 31))
     
-    chess_board.font.style = "bold"
-    chess_board.background.color = "burlywood"
-    for row in chess_board:
+    calendar[0].font.style = "bold"
+    for row in calendar:
         for cell in row:
-            cell.padding.block = 1, 1
-            cell.padding.inline = 2, 2
-    for row in chess_board[0::2]:
-        for cell in row[0::2]:
-            cell.background.color = "#333"
-    for row in chess_board[1::2]:
-        for cell in row[1::2]:
-            cell.background.color = "#333"
-    chess_board.insert_column(0, range(8, 0, -1))
-    chess_board.add_column(range(8, 0, -1))
-    chess_board.add_row(" ABCDEFGH")
-    chess_board.insert_row(0, " ABCDEFGH")
+            cell.width = 3
+            cell.height = 2
+            cell.border.left.style = "single"
+            cell.border.top.style = "single"
+        row[-1].border.right.style = "single"
+    for cell in calendar[-1]:
+        cell.border.bottom.style = "single"
+    for cell in calendar[0]:
+        cell.height = 1
+        cell.text.justify = "center"
     
-    print(chess_board)
+    print(" May 2025")
+    print(calendar)
     ```
 
-2. **Calculator**  
-    ![interface-calculator](https://github.com/user-attachments/assets/a3a791ea-da08-48a1-b22b-605e46b078f9)
+4. **Flag**  
+    ![interface-flag](https://github.com/user-attachments/assets/7da56463-c676-43d4-b2ff-c6fbc1de9514)
 
     ```python
     from tabling import Table
 
-    SCREEN_HEIGHT = 10
-    
-    calculator = Table(colspacing=1, rowspacing=0)
-    calculator.border.style = "solid"
-    for _ in range(SCREEN_HEIGHT):
-        calculator.add_row(("", "", "", "", ""))
-    calculator.add_row(("Menu", "⯇", "⏵", "⨯", "AC"))
-    calculator.add_row(("DEG", "sin", "cos", "tan", "π"))
-    calculator.add_row(("Shift", "√x", "ⁿ√x", "(", ")"))
-    calculator.add_row(("%", "x²", "xⁿ", "□∕□", "÷"))
-    calculator.add_row(("log", 7, 8, 9, "×"))
-    calculator.add_row(("ln", 4, 5, 6, "−"))
-    calculator.add_row(("e", 1, 2, 3, "+"))
-    calculator.add_row(("□", "Ans", 0, ".", "="))
-    
-    calculator[0].border.top.style = "single"
-    for row in calculator[:SCREEN_HEIGHT]:
-        row.border.left.style = "single"
-        row.border.right.style = "single"
-    calculator[SCREEN_HEIGHT - 1].border.bottom.style = "single"
-    
-    for row in calculator[SCREEN_HEIGHT:]:
-        for cell in row: 
-            cell.width = 5
-            cell.text.justify = "center"
-            cell.border.style = "single"
-    
-    print(calculator)
+    flag = Table(colspacing=0, rowspacing=0)
+    for _ in range(3):
+        flag.add_column(" ")
+    for cell in flag[0]:
+        cell.height = 10
+        cell.width = 10
+    flag[0][0].background.color = "blue"
+    flag[0][1].background.color = "white"
+    flag[0][2].background.color = "red"
+
+    print(flag)
     ```
 
-3. **Phone**  
+5. **Bar Graph**  
+    ![interface-bar-graph](https://github.com/user-attachments/assets/4b172d55-de97-4169-8064-647fb778c0aa)
+
+    ```python
+    from tabling import Table
+
+    graph = Table(colspacing=4)
+    graph.add_column((12, 10, 8, 6, 4, 2))
+    for _ in range(4):
+        graph.add_column(("", "", "", "", "", ""))
+
+    for column_index in range(1, 5):
+        graph[0][column_index].width = 6
+
+    graph.margin.top = 1
+    graph[0][-1].margin.right = 3
+    graph[-1].border.bottom.style = "single"
+    for row_index, row in enumerate(graph):
+        row[0].border.right.style = "single"
+        row[0].height = 3
+        if row_index > 2:
+            row[1].background.color = "tomato"
+        if row_index > 3:
+            row[2].background.color = "crimson"
+        if row_index > 0:
+            row[3].background.color = "maroon"
+        if row_index > 1:
+            row[4].background.color = "brown"
+
+    graph.add_row(("", "A","B", "C", "D"))
+    for cell in graph[-1]:
+        cell.text.justify = "center"
+
+    print(graph)
+    ```
+
+6. **Form**  
+    ![interface-form](https://github.com/user-attachments/assets/60fd6cbc-20b5-4960-9c4f-71dd93a08d6d)
+
+    ```python
+    from tabling import Table
+
+    form = Table(colspacing=2, rowspacing=0)
+    form.add_row(("First Name", "Enter your first name"))
+    form.add_row(("Last Name", "Enter your last name"))
+    form.add_row(("Gender", "○ Male ○ Female"))
+    form.add_row(("Email", "Enter your email"))
+    form.add_row(("Phone Number", "Enter your phone number"))
+    form.add_row(("Username", "Enter your username"))
+    form.add_row(("Password", "Enter your password"))
+    form.add_row(("Confirm Password", "Confirm your password"))
+    
+    form.border.style = "single"
+    form.padding.inline = 1, 1
+    for row in form:
+        row[1].width = 25
+        row[1].font.color = "#999"
+        row[1].font.style = "italic"
+        row[1].border.style = "single"
+        row[1].padding.inline = 1, 1
+    form[2][1].border.style = None
+    form[2][1].padding.block = 1, 1
+    
+    form.add_row(("", "Register"))
+    # form[-1][1].text.justify = "right"
+    form[-1].border.style = "single"
+    form[-1].background.color = "lightgray"
+    form[-1].margin.top = 1
+    form[-1].font.style = "bold"
+    form[-1].padding.block = 1, 1
+    
+    print(form)
+    ```
+
+7. **Navigation Bar**  
+    ![interface-navigation-bar](https://github.com/user-attachments/assets/7a88be1f-7397-4dbb-9c1d-e57f0213cf52)
+
+    ```python
+    from tabling import Table
+
+    navbar = Table(colspacing=0, rowspacing=0)
+
+    navbar.add_row(("⌂", "Home"))
+    navbar.add_row(("⟟", "Search"))
+    navbar.add_row(("✩", "Favorites"))
+    navbar.add_row(("☺", "Account"))
+    navbar.add_row(("⚙", "Settings"))
+    navbar.add_column(("", "", "Some account stuff", "", ""))
+
+    navbar.border.style = "single"
+    navbar.padding.inline = 1, 1
+    for cell in navbar[0][2:]:
+        cell.border.top.style = "single"
+    for cell in navbar[-1][2:]:
+        cell.border.bottom.style = "single"
+    for row in navbar:
+        for cell in row:
+            cell.padding.left = 1
+        row[2].border.left.style = "single"
+        row[2].border.right.style = "single"
+        row[2].width = 25
+        row[2].padding.block = 1, 1
+        row[2].text.justify = "center"
+    navbar[3][0].background.color = "gray"
+    navbar[3][1].background.color = "gray"
+    navbar[3][1].font.style = "bold"
+
+    print(navbar)
+    ```
+
+8. **Phone**  
     ![interface-phone](https://github.com/user-attachments/assets/1551b2c7-c75c-474f-823d-9df34ff8e801)
 
     ```python
@@ -473,212 +614,71 @@ This section showcases real-world examples and source code demonstrating how Tab
     print(phone)
     ```
 
-4. **Barcode**  
-    ![interface-barcode](https://github.com/user-attachments/assets/97d9ce75-4797-4384-babb-993086c75b51)
+9. **Calculator**  
+    ![interface-calculator](https://github.com/user-attachments/assets/a3a791ea-da08-48a1-b22b-605e46b078f9)
 
     ```python
     from tabling import Table
 
-    barcode = Table(colspacing=1, rowspacing=0)
-    barcode.add_row("")
-    barcode.add_row((6, "", 0, 0, 1, 0, 8, 7, ""))
-    barcode[0][0].height = 10
-    barcode[0][1].border.right.style = "double"
-    barcode[1][1].border.right.style = "double"
-    barcode[0][2].border.left.style = "solid"
-    barcode[0][3].border.left.style = "single"
-    barcode[0][4].border.left.style = "solid"
-    barcode[0][5].border.left.style = "single"
-    barcode[0][6].border.left.style = "solid"
-    barcode[0][7].border.left.style = "solid"
-    barcode[0][8].border.left.style = "double"
-    barcode[1][8].border.left.style = "double"
+    SCREEN_HEIGHT = 10
     
-    print(barcode)
+    calculator = Table(colspacing=1, rowspacing=0)
+    calculator.border.style = "solid"
+    for _ in range(SCREEN_HEIGHT):
+        calculator.add_row(("", "", "", "", ""))
+    calculator.add_row(("Menu", "⯇", "⏵", "⨯", "AC"))
+    calculator.add_row(("DEG", "sin", "cos", "tan", "π"))
+    calculator.add_row(("Shift", "√x", "ⁿ√x", "(", ")"))
+    calculator.add_row(("%", "x²", "xⁿ", "□∕□", "÷"))
+    calculator.add_row(("log", 7, 8, 9, "×"))
+    calculator.add_row(("ln", 4, 5, 6, "−"))
+    calculator.add_row(("e", 1, 2, 3, "+"))
+    calculator.add_row(("□", "Ans", 0, ".", "="))
+    
+    calculator[0].border.top.style = "single"
+    for row in calculator[:SCREEN_HEIGHT]:
+        row.border.left.style = "single"
+        row.border.right.style = "single"
+    calculator[SCREEN_HEIGHT - 1].border.bottom.style = "single"
+    
+    for row in calculator[SCREEN_HEIGHT:]:
+        for cell in row: 
+            cell.width = 5
+            cell.text.justify = "center"
+            cell.border.style = "single"
+    
+    print(calculator)
     ```
 
-5. **Menu**  
-    ![interface-menu](https://github.com/user-attachments/assets/569ab58c-8b4c-4171-bd6e-98f13340e134)
-
-    ```python    
-    from tabling import Table
-
-    question = "What's your favorite programming language?"
-    choices = ("Python", "C", "C++", "Javascript")
-    options = (f"{i}." for i in range(1, len(choices) + 1))
-
-    menu = Table(colspacing=1, rowspacing=0)
-    menu.add_column(options)
-    menu.add_column(choices)
-    menu.padding.left = 2
-
-    print(question)
-    print(menu)
-
-    option = int(input("> "))
-    print(f"You chose: {menu[option-1][1]}")
-    ```
-
-6. **Calendar**  
-    ![interface-calendar](https://github.com/user-attachments/assets/5a2aff4e-5c04-479d-883f-5d18d42fd94f)
+10. **Chess Board**  
+    ![interface-chess-board](https://github.com/user-attachments/assets/b2863c8f-4e97-4838-9e1b-aa65348dff79)
 
     ```python
     from tabling import Table
-
-    calendar = Table(colspacing=0, rowspacing=0)
     
-    calendar.add_row(("Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"))
-    calendar.add_row(("", "", "", "", 1, 2, 3))
-    calendar.add_row((4, 5, 6, 7, 8, 9, 10))
-    calendar.add_row((11, 12, 13, 14, 15, 16, 17))
-    calendar.add_row((18, 19, 20, 21, 22, 23, 24))
-    calendar.add_row((25, 26, 27, 28, 29, 30, 31))
+    chess_board = Table(colspacing=0, rowspacing=0)
     
-    calendar[0].font.style = "bold"
-    for row in calendar:
+    for _ in range(8):
+        chess_board.add_row(("",)*8)
+    
+    chess_board.font.style = "bold"
+    chess_board.background.color = "burlywood"
+    for row in chess_board:
         for cell in row:
-            cell.width = 3
-            cell.height = 2
-            cell.border.left.style = "single"
-            cell.border.top.style = "single"
-        row[-1].border.right.style = "single"
-    for cell in calendar[-1]:
-        cell.border.bottom.style = "single"
-    for cell in calendar[0]:
-        cell.height = 1
-        cell.text.justify = "center"
+            cell.padding.block = 1, 1
+            cell.padding.inline = 2, 2
+    for row in chess_board[0::2]:
+        for cell in row[0::2]:
+            cell.background.color = "#333"
+    for row in chess_board[1::2]:
+        for cell in row[1::2]:
+            cell.background.color = "#333"
+    chess_board.insert_column(0, range(8, 0, -1))
+    chess_board.add_column(range(8, 0, -1))
+    chess_board.add_row(" ABCDEFGH")
+    chess_board.insert_row(0, " ABCDEFGH")
     
-    print(" May 2025")
-    print(calendar)
-    ```
-
-
-7. **Form**  
-    ![interface-form](https://github.com/user-attachments/assets/60fd6cbc-20b5-4960-9c4f-71dd93a08d6d)
-
-    ```python
-    from tabling import Table
-
-    form = Table(colspacing=2, rowspacing=0)
-    form.add_row(("First Name", "Enter your first name"))
-    form.add_row(("Last Name", "Enter your last name"))
-    form.add_row(("Gender", "○ Male ○ Female"))
-    form.add_row(("Email", "Enter your email"))
-    form.add_row(("Phone Number", "Enter your phone number"))
-    form.add_row(("Username", "Enter your username"))
-    form.add_row(("Password", "Enter your password"))
-    form.add_row(("Confirm Password", "Confirm your password"))
-    
-    form.border.style = "single"
-    form.padding.inline = 1, 1
-    for row in form:
-        row[1].width = 25
-        row[1].font.color = "#999"
-        row[1].font.style = "italic"
-        row[1].border.style = "single"
-        row[1].padding.inline = 1, 1
-    form[2][1].border.style = None
-    form[2][1].padding.block = 1, 1
-    
-    form.add_row(("", "Register"))
-    # form[-1][1].text.justify = "right"
-    form[-1].border.style = "single"
-    form[-1].background.color = "lightgray"
-    form[-1].margin.top = 1
-    form[-1].font.style = "bold"
-    form[-1].padding.block = 1, 1
-    
-    print(form)
-    ```
-
-8. **Navigation Bar**  
-    ![interface-navigation-bar](https://github.com/user-attachments/assets/7a88be1f-7397-4dbb-9c1d-e57f0213cf52)
-
-    ```python
-    from tabling import Table
-
-    navbar = Table(colspacing=0, rowspacing=0)
-
-    navbar.add_row(("⌂", "Home"))
-    navbar.add_row(("⟟", "Search"))
-    navbar.add_row(("✩", "Favorites"))
-    navbar.add_row(("☺", "Account"))
-    navbar.add_row(("⚙", "Settings"))
-    navbar.add_column(("", "", "Some account stuff", "", ""))
-
-    navbar.border.style = "single"
-    navbar.padding.inline = 1, 1
-    for cell in navbar[0][2:]:
-        cell.border.top.style = "single"
-    for cell in navbar[-1][2:]:
-        cell.border.bottom.style = "single"
-    for row in navbar:
-        for cell in row:
-            cell.padding.left = 1
-        row[2].border.left.style = "single"
-        row[2].border.right.style = "single"
-        row[2].width = 25
-        row[2].padding.block = 1, 1
-        row[2].text.justify = "center"
-    navbar[3][0].background.color = "gray"
-    navbar[3][1].background.color = "gray"
-    navbar[3][1].font.style = "bold"
-
-    print(navbar)
-    ```
-9. **Bar Graph**  
-    ![interface-bar-graph](https://github.com/user-attachments/assets/4b172d55-de97-4169-8064-647fb778c0aa)
-
-    ```python
-    from tabling import Table
-
-    graph = Table(colspacing=4)
-    graph.add_column((12, 10, 8, 6, 4, 2))
-    for _ in range(4):
-        graph.add_column(("", "", "", "", "", ""))
-
-    for column_index in range(1, 5):
-        graph[0][column_index].width = 6
-
-    graph.margin.top = 1
-    graph[0][-1].margin.right = 3
-    graph[-1].border.bottom.style = "single"
-    for row_index, row in enumerate(graph):
-        row[0].border.right.style = "single"
-        row[0].height = 3
-        if row_index > 2:
-            row[1].background.color = "tomato"
-        if row_index > 3:
-            row[2].background.color = "crimson"
-        if row_index > 0:
-            row[3].background.color = "maroon"
-        if row_index > 1:
-            row[4].background.color = "brown"
-
-    graph.add_row(("", "A","B", "C", "D"))
-    for cell in graph[-1]:
-        cell.text.justify = "center"
-
-    print(graph)
-    ```
-
-10. **Flag**  
-    ![interface-flag](https://github.com/user-attachments/assets/7da56463-c676-43d4-b2ff-c6fbc1de9514)
-
-    ```python
-    from tabling import Table
-
-    flag = Table(colspacing=0, rowspacing=0)
-    for _ in range(3):
-        flag.add_column(" ")
-    for cell in flag[0]:
-        cell.height = 10
-        cell.width = 10
-    flag[0][0].background.color = "blue"
-    flag[0][1].background.color = "white"
-    flag[0][2].background.color = "red"
-
-    print(flag)
+    print(chess_board)
     ```
 
 ## Conclusion
