@@ -659,7 +659,7 @@ This section showcases real-world examples and source code demonstrating how Tab
     print(graph)
     ```
 
-10. flag
+10. flag  
     ![interface-flag](https://github.com/user-attachments/assets/7da56463-c676-43d4-b2ff-c6fbc1de9514)
 
     ```python
