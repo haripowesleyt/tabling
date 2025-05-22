@@ -29,7 +29,9 @@ class Table(Element):
     def __iter__(self: Self) -> Iterator:
         return iter(self._rows)
 
-    def __getitem__(self: Self, index: int) -> Row:
+    def __getitem__(self: Self, index: Union[int, slice]):
+        if isinstance(index, slice):
+            return self._rows[index.start or 0: index.stop or len(self._rows): index.step or 1]
         try:
             return self._rows[index]
         except IndexError as exc:

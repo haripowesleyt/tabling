@@ -1,6 +1,6 @@
 """Defines the `Axis` class."""
 
-from typing import Iterator, List, Self
+from typing import Iterator, List, Self, Union
 from .cell import Cell
 from .element import Element
 
@@ -19,7 +19,9 @@ class Axis(Element):
     def __iter__(self: Self) -> Iterator[Cell]:
         return iter(self._cells)
 
-    def __getitem__(self: Self, index: int) -> Cell:
+    def __getitem__(self: Self, index: Union[int, slice]):
+        if isinstance(index, slice):
+            return self._cells[index.start or 0: index.stop or len(self._cells): index.step or 1]
         try:
             return self._cells[index]
         except IndexError as exc:
