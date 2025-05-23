@@ -31,13 +31,13 @@ class Border:  # pylint: disable=too-many-instance-attributes
             for line in text.split("\n")
         )
         overline = underline = ""
-        if top.strip():
+        if unstyle(top).strip():
             overline = (
                 self._Side("top-left", self.left.style, self.left.color).render(1)
                 + top
                 + self._Side("top-right", self.right.style, self.right.color).render(1)
             ) + "\n"
-        if bottom.strip():
+        if unstyle(bottom).strip():
             underline = "\n" + (
                 self._Side("bottom-left", self.left.style, self.left.color).render(1)
                 + bottom
