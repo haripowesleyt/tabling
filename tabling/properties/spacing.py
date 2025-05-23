@@ -92,3 +92,14 @@ class Spacing:  # pylint: disable=too-many-instance-attributes
     @block.setter
     def block(self: Self, values: Tuple[int, int]) -> None:
         self.top, self.bottom = self._validate_pair(values)
+
+    @property
+    def all(self: Self) -> Tuple[int, int, int, int]:
+        """Gets the padding to the left, right, top, and bottom respectively."""
+        return self.left, self.right, self.top, self.bottom
+
+    @all.setter
+    def all(self: Self, values: Tuple[int, int, int, int]):
+        if len(values) != 4:
+            raise ValueError(f"Invalid spacing values {values}. Expected a 4-int tuple.")
+        self.left, self.right, self.top, self.bottom = map(self._validate, values)
