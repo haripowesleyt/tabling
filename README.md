@@ -14,6 +14,7 @@ Tabling is a Python library for creating highly customizable tables in the conso
 - [Templates](#templates)
 - [Effects](#effects)
 - [Applications](#applications)
+- [FAQ](#faqtroubleshooting)
 - [Contributing](#contributing)
 - [License](#license)
 - [Conclusion](#conclusion)
@@ -520,4 +521,4 @@ This project is licensed under the **MIT License** – see the [LICENSE](https:/
 
 **Tabling** makes it easy to create clean, customizable tables in the terminal. It’s fast, flexible, and built with a CSS-like approach that’s intuitive for anyone familiar with web design. Whether you're formatting data or building full console interfaces, Tabling gets out of your way and lets you focus on structure and style. Simple as that.
 
-> “Tabling is a great tool not because of what it does but because of what it enables you to do.” — Haripo Wesley T.
+> *“Tabling is a great tool not because of what it does, but because of what it enables you to do.”* — Haripo Wesley T.
