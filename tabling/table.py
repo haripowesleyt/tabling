@@ -1,10 +1,8 @@
 """Defines the `Table` class."""
 
-import csv
-import json
 import re
 from copy import deepcopy
-from typing import Any, Dict, Iterable, Iterator, List, Optional, Self, Union
+from typing import Any, Iterable, Iterator, List, Self, Union
 from printly import unstyle
 from .cell import Cell
 from .column import Column
@@ -159,77 +157,6 @@ class Table(Element):
     def clear(self: Self) -> None:
         """Removes all rows."""
         self._rows, self._columns = [], []
-
-    def import_csv(self: Self, filepath: str) -> None:
-        """Imports rows from csv file."""
-        try:
-            with open(filepath, "r", encoding="utf-8") as csv_file:
-                for entries in csv.reader(csv_file):
-                    self.add_row(entries)
-        except FileNotFoundError as exc:
-            raise FileNotFoundError(f"CSV file {filepath!r} not found!") from exc
-
-    def export_csv(self: Self, filepath: str) -> None:
-        """Exports rows to csv file."""
-        with open(filepath, "w", encoding="utf-8") as csv_file:
-            writer = csv.writer(csv_file)
-            for row in self._rows:
-                writer.writerow((f"{cell.value}" for cell in row))
-
-    def import_json(  # pylint: disable=too-many-branches
-        self: Self, filepath: str, key: Optional[str] = None
-    ) -> None:
-        """Imports rows from json file."""
-        try:
-            with open(filepath, "r", encoding="utf-8") as json_file:
-                root = json.load(json_file)
-        except FileNotFoundError as exc:
-            raise FileNotFoundError(f"JSON file {filepath} not found!") from exc
-        while True:
-            if isinstance(root, list):
-                if all((isinstance(entries, list) for entries in root)):
-                    for entries in root:
-                        self.add_row(entries)
-                elif all((isinstance(entries, dict) for entries in root)):
-                    header: List[Any] = []
-                    for obj in root:
-                        if header != (keys := list(obj.keys())):
-                            header += [k for k in keys if not k in header]
-                    for obj in root:
-                        for _key in header:
-                            obj[_key] = obj.get(_key, "")
-                    if header:
-                        self.add_row(header)
-                    for obj in root:
-                        self.add_row((obj[key] for key in header))
-                else:
-                    raise ValueError("JSON array root should be of one type: array or object.")
-            elif isinstance(root, dict):
-                if key:
-                    if root := root.get(key):
-                        continue
-                    raise KeyError(f"No key {key} in the root object.")
-                raise ValueError("No key given for a json file with an object root.")
-            break
-
-    def export_json(
-        self: Self, filepath: str, key: Optional[str] = None, as_objects: bool = True
-    ) -> None:
-        """Exports rows to json file."""
-        contents: List[Union[Dict, List]] = []
-        if as_objects:
-            if self._rows:
-                for row in self._rows[1:]:
-                    contents.append({self._rows[0][i].value: row[i].value for i in range(len(row))})
-        else:
-            contents = [[cell.value for cell in row] for row in self._rows]
-        with open(filepath, "w", encoding="utf-8") as json_file:
-            json.dump({key: contents} if key else contents, json_file, indent=2)
-
-    def export_txt(self: Self, filepath: str) -> None:
-        """Exports plain, rendered table to plain/txt file."""
-        with open(filepath, "w", encoding="utf-8") as txt_file:
-            txt_file.write(unstyle(str(self)))
 
     def _get_row(self: Self, index: int) -> Row:
         if abs(index) > len(self._rows):
