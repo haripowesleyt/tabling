@@ -13,6 +13,9 @@ class Axis(Element):
         self._cells: List[Cell] = []
         self.cellspacing: int = cellspacing
 
+    def __bool__(self: Self) -> bool:
+        return bool(self._cells)
+
     def __len__(self: Self) -> int:
         return len(self._cells)
 
@@ -29,6 +32,11 @@ class Axis(Element):
 
     def __contains__(self: Self, cell: Cell) -> bool:
         return cell in self._cells
+
+    def __add__(self: Self, other: "Axis") -> "Axis":
+        for cell in other:
+            self.add(cell)
+        return self
 
     def add(self: Self, cell: Cell) -> None:
         """Adds a cell."""

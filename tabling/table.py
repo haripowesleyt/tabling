@@ -21,6 +21,9 @@ class Table(Element):
         self.colspacing: int = colspacing
         self.rowspacing: int = rowspacing
 
+    def __bool__(self: Self) -> bool:
+        return bool(self._rows)
+
     def __len__(self: Self) -> int:
         return len(self._rows)
 
@@ -34,6 +37,21 @@ class Table(Element):
             return self._rows[index]
         except IndexError as exc:
             raise IndexError(f"Row index {index} is out of range.") from exc
+
+    def __add__(self: Self, other: "Table") -> "Table":
+        other_columns = len(other[0])
+        self_columns = len(self._columns)
+        if (diff := other_columns - self_columns) > 0:
+            for _ in range(diff):
+                self.add_column("")
+        elif diff < 0:
+            for _ in range(abs(diff)):
+                other.add_column("")
+        for row in other:
+            self._rows.append(row)
+            for index, cell in enumerate(row):
+                self._columns[index].add(cell)
+        return self
 
     def __str__(self: Self) -> str:
         if self.preserve:
