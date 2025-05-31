@@ -50,11 +50,8 @@ class html:  # pylint: disable=invalid-name, too-few-public-methods
     @staticmethod
     def loadall(filepath: str) -> Iterator[Table]:  # pylint: disable=too-many-locals
         """Loads all tables in an HTML file."""
-        try:
-            with open(filepath, "r", encoding="utf-8") as html_file:
-                page = html_file.read()
-        except FileNotFoundError as exc:
-            raise FileNotFoundError(f"HTML file {filepath} not found!") from exc
+        with open(filepath, "r", encoding="utf-8") as html_file:
+            page = html_file.read()
 
         def findall(tag: str, scope: str) -> List[Tuple[str, str]]:
             return re.findall(rf"<{tag}(.*?)>(.*?)</{tag}>", scope, re.IGNORECASE | re.DOTALL)

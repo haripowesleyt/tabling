@@ -32,11 +32,8 @@ class json:  # pylint: disable=invalid-name
         table: Table, filepath: str, key: Optional[str] = None
     ):
         """Loads rows from JSON file to table."""
-        try:
-            with open(filepath, "r", encoding="utf-8") as json_file:
-                root = jload(json_file)
-        except FileNotFoundError as exc:
-            raise FileNotFoundError(f"JSON file {filepath} not found!") from exc
+        with open(filepath, "r", encoding="utf-8") as json_file:
+            root = jload(json_file)
         while True:
             if isinstance(root, list):
                 if all((isinstance(row, list) for row in root)):

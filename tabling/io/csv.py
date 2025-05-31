@@ -18,9 +18,6 @@ class csv:  # pylint: disable=invalid-name
     @staticmethod
     def load(table: Table, filepath: str) -> None:
         """Loads rows from a CSV file to a table."""
-        try:
-            with open(filepath, "r", encoding="utf-8") as csv_file:
-                for entries in reader(csv_file):
-                    table.add_row(entries)
-        except FileNotFoundError as exc:
-            raise FileNotFoundError(f"CSV file {filepath!r} not found!") from exc
+        with open(filepath, "r", encoding="utf-8") as csv_file:
+            for entries in reader(csv_file):
+                table.add_row(entries)

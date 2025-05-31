@@ -54,11 +54,8 @@ class md:  # pylint: disable=invalid-name, too-few-public-methods
     @staticmethod
     def loadall(filepath: str) -> Iterator[Table]:
         """Gets all tables in an MD file."""
-        try:
-            with open(filepath, "r", encoding="utf-8") as md_file:
-                markdown = md_file.read()
-        except FileNotFoundError as exc:
-            raise FileNotFoundError(f"MD file {filepath} not found!") from exc
+        with open(filepath, "r", encoding="utf-8") as md_file:
+            markdown = md_file.read()
         row_re = r"\s*\|(.*\|\s*)+" + "\n"
         table_re = f"({row_re}{row_re}(?:{row_re})*)"
         md_tables = tuple(m[0].strip() for m in findall(table_re, markdown))
