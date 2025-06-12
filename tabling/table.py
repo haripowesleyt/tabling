@@ -165,12 +165,12 @@ class Table(Element):
         repl = Background(color="yellowgreen").apply(f"{value}")
         print(self._render(re.sub(f"{value}", repl, unstyle(str(self)), re.IGNORECASE)))
 
-    def replace(self: Self, value: Any, repl: Any) -> None:
+    def replace(self: Self, old: Any, new: Any) -> None:
         """Replaces matching values."""
         for row in self._rows:
             for cell in row:
-                if re.findall(f"{value}", f"{cell.value}"):
-                    cell.value = re.sub(f"{value}", repl, f"{cell.value}", 0, re.IGNORECASE)
+                if re.findall(f"{old}", f"{cell.value}"):
+                    cell.value = re.sub(f"{old}", new, f"{cell.value}", 0, re.IGNORECASE)
 
     def clear(self: Self) -> None:
         """Removes all rows."""
