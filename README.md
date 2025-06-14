@@ -7,7 +7,7 @@
 
 Tabling is a Python library, inspired by HTML and CSS, for creating highly customizable tables in the console.
 
-## Key Features
+## Features
 
 - Add/remove/swap rows, columns, and cells.
 - Find & replace values
@@ -17,7 +17,7 @@ Tabling is a Python library, inspired by HTML and CSS, for creating highly custo
 - 5+ border styles: single, double, dashed, dotted, solid
 - 5+ font styles: bold, italic, strikethrough, underline, overline
 - All HTML colors: [140+ names](https://htmlcolorcodes.com/color-names/), all RGB values, all HEX codes
-- Import/export from CSV, JSON, HTML, Markdown, Plain text, TSV, XLSX, SQLite
+- Import/export from CSV, JSON, HTML, Markdown, Plain Text, TSV, XLSX, SQLite
 - Design UIs like how HTML tables were once used before CSS Grid and Flexbox
 
 ## Installation
@@ -54,25 +54,27 @@ print(table)
 
 ![table](https://raw.githubusercontent.com/haripowesleyt/tabling/main/assets/images/table.png)
 
-## Table Operations
+## Methods
 
-| Method                                 | Description                          |
-|----------------------------------------|--------------------------------------|
-| `add_row(entries)`                     | Add a row                            |
-| `add_column(entries)`                  | Add a column                         |
-| `insert_row(index, entries)`           | Insert a row at a position           |
-| `insert_column(index, entries)`        | Insert a column at a position        |
-| `remove_row(index)`                    | Remove a row                         |
-| `remove_column(index)`                 | Remove a column                      |
-| `swap_rows(index1, index2)`            | Swap two rows                        |
-| `swap_columns(index1, index2)`         | Swap two columns                     |
-| `sort_rows(key, start=0, reverse=False)`              | Sort rows by column key              |
-| `sort_columns(key, start=0, reverse=False)`           | Sort columns by row key              |
-| `find(value)`                          | Highlight matching values            |
-| `replace(old, new)`                    | Replace values                       |
-| `clear()`                              | Remove all rows & columns            |
+The following table methods allow you to manipulate a table. 
 
-## Styling & Customization
+| Method                                      | Description                          |
+|---------------------------------------------|--------------------------------------|
+| `add_row(entries)`                          | Add a row                            |
+| `add_column(entries)`                       | Add a column                         |
+| `insert_row(index, entries)`                | Insert a row at a position           |
+| `insert_column(index, entries)`             | Insert a column at a position        |
+| `remove_row(index)`                         | Remove a row                         |
+| `remove_column(index)`                      | Remove a column                      |
+| `swap_rows(index1, index2)`                 | Swap two rows                        |
+| `swap_columns(index1, index2)`              | Swap two columns                     |
+| `sort_rows(key, start=0, reverse=False)`    | Sort rows by column key              |
+| `sort_columns(key, start=0, reverse=False)` | Sort columns by row key              |
+| `find(value)`                               | Highlight matching values            |
+| `replace(old, new)`                         | Replace values                       |
+| `clear()`                                   | Remove all rows & columns            |
+
+## Customization
 
 Each element (table, row, column, cell) supports properties similar to CSS:
 
@@ -103,10 +105,9 @@ Each element (table, row, column, cell) supports properties similar to CSS:
 |            | letter_spacing | int        | Spaces between letters       |
 |            | word_spacing   | int        | Spaces between words         |
 
-\
-**General Syntax:** `element.property.attribute = value`
-
 ### Example
+
+**General Syntax:** `element.property.attribute = value`
 
 **Tip:** A table behaves like a list of rows, and a row behaves like a list of cells—both support indexing, slicing, and iteration.
 
@@ -123,15 +124,13 @@ for row in table[1:]:
 
 > Explore [Tabling Templates](https://github.com/haripowesleyt/tabling-templates) for ready-made table styles.
 
-## File I/O
+## Import/Export
 
-Tabling supports multiple file formats via the `tabling.io` module.
+Tabling supports import and export in multiple file formats—CSV, TSV, JSON, HTML, Markdown, Plain Text, XLSX, and SQLite—via the `tabling.io` module.
 
-### Supported Formats
+### Examples
 
-- CSV, TSV, JSON, HTML, Markdown, Plain text, XLSX, SQLite
-
-### Export Example
+#### Exporting
 
 ```python
 from tabling import Table
@@ -150,7 +149,7 @@ xlsx.dump(table, "table.xlsx")
 sqlite.dump(table, "table.db", "title")
 ```
 
-### Import Example
+#### Importing
 
 ```python
 from tabling import Table
@@ -166,10 +165,6 @@ md.load(table, "table.md")
 xlsx.load(table, "table.xlsx")
 sqlite.load(table, "table.db", "title")
 ```
-
-## Contributing
-
-Contributions, suggestions, and issues are welcome! See [CONTRIBUTING.md](https://github.com/haripowesleyt/tabling/blob/main/CONTRIBUTING.md).
 
 ## License
 
