@@ -4,7 +4,7 @@ from typing import Dict, Literal, Optional, Self, TypeAlias, Union
 from printly import style as apply_color, unstyle
 from printly.types import Color
 
-Style: TypeAlias = Union[str, Literal["single", "double", "dashed", "dotted", "solid"]]
+Style: TypeAlias = Union[str, Literal["single", "double", "dashed", "dotted", "solid", "curved"]]
 Side: TypeAlias = Literal[
     "left", "right", "top", "bottom", "top-left", "top-right", "bottom-left", "bottom-right"
 ]
@@ -151,34 +151,24 @@ class Border:  # pylint: disable=too-many-instance-attributes
                 "bottom-left": "┗",
                 "bottom-right": "┛",
             },
-            # "rounded": {
-            #     "left": "│",
-            #     "right": "│",
-            #     "top": "─",
-            #     "bottom": "─",
-            #     "top-left": "╭",
-            #     "top-right": "╮",
-            #     "bottom-left": "╰",
-            #     "bottom-right": "╯",
-            # },
-            # "solid-dashed": {
-            #     "left": "𜸩",
-            #     "right": "𜸩",
-            #     "top": "𜸟",
-            #     "bottom": "𜸟",
-            #     "top-left": "𜸛",
-            #     "top-right": "𜸧",
-            #     "bottom-left": "𜸽",
-            #     "bottom-right": "𜹄",
-            # },
-            # "single-double": {
-            #     "left": "║",
-            #     "right": "║",
-            #     "top": "─",
-            #     "bottom": "─",
-            #     "top-left": "╓",
-            #     "top-right": "╖",
-            #     "bottom-left": "╙",
-            #     "bottom-right": "╜",
-            # },
+            "curved": {
+                "left": "│",
+                "right": "│",
+                "top": "─",
+                "bottom": "─",
+                "top-left": "╭",
+                "top-right": "╮",
+                "bottom-left": "╰",
+                "bottom-right": "╯",
+            },
+            "single-double": {
+                "left": "║",
+                "right": "║",
+                "top": "─",
+                "bottom": "─",
+                "top-left": "╓",
+                "top-right": "╖",
+                "bottom-left": "╙",
+                "bottom-right": "╜",
+            },
         }

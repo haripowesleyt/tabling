@@ -14,7 +14,7 @@ Tabling is a Python library, inspired by HTML and CSS, for creating highly custo
 - Sort rows or columns by key
 - Customize background, font, padding, margin, and borders
 - Modify text alignment, direction, spacing, wrapping
-- 5+ border styles: single, double, dashed, dotted, solid
+- 6+ border styles: single, double, dashed, dotted, solid, curved
 - 5+ font styles: bold, italic, strikethrough, underline, overline
 - All HTML colors: [140+ names](https://htmlcolorcodes.com/color-names/), all RGB values, all HEX codes
 - Import/export from CSV, JSON, HTML, Markdown, Plain Text, TSV, XLSX, SQLite
