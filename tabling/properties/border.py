@@ -74,11 +74,11 @@ class Border:  # pylint: disable=too-many-instance-attributes
             self._side: Side = side
             self.style: Optional[Style] = style
             self.color: Optional[Color] = color
+            self.char: str
 
         def render(self: Self, length: int) -> str:
             """Generates a visual representation of the border side."""
-            char = Border._CHARS[self.style][self._side]  # pylint: disable=protected-access
-            return apply_color(char * length, fg=self.color)
+            return apply_color(self.char[0:1] * length, fg=self.color)
 
         @property
         def style(self: Self) -> Optional[Style]:
@@ -90,6 +90,7 @@ class Border:  # pylint: disable=too-many-instance-attributes
             if style not in (styles := tuple(Border._CHARS)):  # pylint: disable=protected-access
                 raise ValueError(f"Invalid border style {style!r}. Expected one of {styles}.")
             self._style = style
+            self.char = Border._CHARS[self.style][self._side]  # pylint: disable=protected-access
 
     _CHARS: Dict[Optional[Style], Dict[Side, str]] = {
         None: {
