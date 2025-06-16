@@ -11,7 +11,7 @@ Side: TypeAlias = Literal[
 
 
 class Border:  # pylint: disable=too-many-instance-attributes
-    """Represents the border of an element."""
+    """Represents a border."""
 
     def __init__(self: Self, style: Optional[Style], color: Optional[Color]) -> None:
         self.left = self._Side("left", style, color)
@@ -25,22 +25,21 @@ class Border:  # pylint: disable=too-many-instance-attributes
         """Applies the border to given text."""
         left, right = self.left.render(1), self.right.render(1)
         length = max(map(len, map(unstyle, text.split("\n"))))
-        top, bottom = self.top.render(length), self.bottom.render(length)
         inline = "\n".join(
             left + line.ljust(length + len(line) - len(unstyle(line))) + right
             for line in text.split("\n")
         )
         overline = underline = ""
-        if unstyle(top).strip():
+        if self.top.char:
             overline = (
                 self._Side("top-left", self.left.style, self.left.color).render(1)
-                + top
+                + self.top.render(length)
                 + self._Side("top-right", self.right.style, self.right.color).render(1)
             ) + "\n"
-        if unstyle(bottom).strip():
+        if self.bottom.char:
             underline = "\n" + (
                 self._Side("bottom-left", self.left.style, self.left.color).render(1)
-                + bottom
+                + self.bottom.render(length)
                 + self._Side("bottom-right", self.right.style, self.right.color).render(1)
             )
         return overline + inline + underline
@@ -66,7 +65,6 @@ class Border:  # pylint: disable=too-many-instance-attributes
         self._color = color
 
     class _Side:
-        """Represents a border side."""
 
         def __init__(
             self: Self, side: Side, style: Optional[Style], color: Optional[Color]
@@ -77,7 +75,7 @@ class Border:  # pylint: disable=too-many-instance-attributes
             self.char: str
 
         def render(self: Self, length: int) -> str:
-            """Generates a visual representation of the border side."""
+            """Generates a visual representation of the side."""
             return apply_color(self.char[0:1] * length, fg=self.color)
 
         @property
@@ -87,100 +85,100 @@ class Border:  # pylint: disable=too-many-instance-attributes
 
         @style.setter
         def style(self: Self, style: Optional[Style]) -> None:
-            if style not in (styles := tuple(Border._CHARS)):  # pylint: disable=protected-access
+            if style not in (styles := tuple(self.CHARS)):
                 raise ValueError(f"Invalid border style {style!r}. Expected one of {styles}.")
             self._style = style
-            self.char = Border._CHARS[self.style][self._side]  # pylint: disable=protected-access
+            self.char = self.CHARS[self.style][self._side]
 
-    _CHARS: Dict[Optional[Style], Dict[Side, str]] = {
-        None: {
-            "left": "",
-            "right": "",
-            "top": "",
-            "bottom": "",
-            "top-left": "",
-            "top-right": "",
-            "bottom-left": "",
-            "bottom-right": "",
-        },
-        "single": {
-            "left": "│",
-            "right": "│",
-            "top": "─",
-            "bottom": "─",
-            "top-left": "┌",
-            "top-right": "┐",
-            "bottom-left": "└",
-            "bottom-right": "┘",
-        },
-        "double": {
-            "left": "║",
-            "right": "║",
-            "top": "═",
-            "bottom": "═",
-            "top-left": "╔",
-            "top-right": "╗",
-            "bottom-left": "╚",
-            "bottom-right": "╝",
-        },
-        "dashed": {
-            "left": "┊",
-            "right": "┊",
-            "top": "╌",
-            "bottom": "╌",
-            "top-left": "┌",
-            "top-right": "┐",
-            "bottom-left": "└",
-            "bottom-right": "┘",
-        },
-        "dotted": {
-            "left": "⸳",
-            "right": "⸳",
-            "top": "⸳",
-            "bottom": "⸳",
-            "top-left": "⸳",
-            "top-right": "⸳",
-            "bottom-left": "⸳",
-            "bottom-right": "⸳",
-        },
-        "solid": {
-            "left": "┃",
-            "right": "┃",
-            "top": "━",
-            "bottom": "━",
-            "top-left": "┏",
-            "top-right": "┓",
-            "bottom-left": "┗",
-            "bottom-right": "┛",
-        },
-        # "rounded": {
-        #     "left": "│",
-        #     "right": "│",
-        #     "top": "─",
-        #     "bottom": "─",
-        #     "top-left": "╭",
-        #     "top-right": "╮",
-        #     "bottom-left": "╰",
-        #     "bottom-right": "╯",
-        # },
-        # "solid-dashed": {
-        #     "left": "𜸩",
-        #     "right": "𜸩",
-        #     "top": "𜸟",
-        #     "bottom": "𜸟",
-        #     "top-left": "𜸛",
-        #     "top-right": "𜸧",
-        #     "bottom-left": "𜸽",
-        #     "bottom-right": "𜹄",
-        # },
-        # "single-double": {
-        #     "left": "║",
-        #     "right": "║",
-        #     "top": "─",
-        #     "bottom": "─",
-        #     "top-left": "╓",
-        #     "top-right": "╖",
-        #     "bottom-left": "╙",
-        #     "bottom-right": "╜",
-        # },
-    }
+        CHARS: Dict[Optional[Style], Dict[Side, str]] = {
+            None: {
+                "left": "",
+                "right": "",
+                "top": "",
+                "bottom": "",
+                "top-left": "",
+                "top-right": "",
+                "bottom-left": "",
+                "bottom-right": "",
+            },
+            "single": {
+                "left": "│",
+                "right": "│",
+                "top": "─",
+                "bottom": "─",
+                "top-left": "┌",
+                "top-right": "┐",
+                "bottom-left": "└",
+                "bottom-right": "┘",
+            },
+            "double": {
+                "left": "║",
+                "right": "║",
+                "top": "═",
+                "bottom": "═",
+                "top-left": "╔",
+                "top-right": "╗",
+                "bottom-left": "╚",
+                "bottom-right": "╝",
+            },
+            "dashed": {
+                "left": "┊",
+                "right": "┊",
+                "top": "╌",
+                "bottom": "╌",
+                "top-left": "┌",
+                "top-right": "┐",
+                "bottom-left": "└",
+                "bottom-right": "┘",
+            },
+            "dotted": {
+                "left": "⸳",
+                "right": "⸳",
+                "top": "⸳",
+                "bottom": "⸳",
+                "top-left": "⸳",
+                "top-right": "⸳",
+                "bottom-left": "⸳",
+                "bottom-right": "⸳",
+            },
+            "solid": {
+                "left": "┃",
+                "right": "┃",
+                "top": "━",
+                "bottom": "━",
+                "top-left": "┏",
+                "top-right": "┓",
+                "bottom-left": "┗",
+                "bottom-right": "┛",
+            },
+            # "rounded": {
+            #     "left": "│",
+            #     "right": "│",
+            #     "top": "─",
+            #     "bottom": "─",
+            #     "top-left": "╭",
+            #     "top-right": "╮",
+            #     "bottom-left": "╰",
+            #     "bottom-right": "╯",
+            # },
+            # "solid-dashed": {
+            #     "left": "𜸩",
+            #     "right": "𜸩",
+            #     "top": "𜸟",
+            #     "bottom": "𜸟",
+            #     "top-left": "𜸛",
+            #     "top-right": "𜸧",
+            #     "bottom-left": "𜸽",
+            #     "bottom-right": "𜹄",
+            # },
+            # "single-double": {
+            #     "left": "║",
+            #     "right": "║",
+            #     "top": "─",
+            #     "bottom": "─",
+            #     "top-left": "╓",
+            #     "top-right": "╖",
+            #     "bottom-left": "╙",
+            #     "bottom-right": "╜",
+            # },
+        }
