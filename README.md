@@ -126,7 +126,7 @@ for row in table[1:]:
 
 ## Import/Export
 
-Tabling supports import and export in multiple file formats—CSV, TSV, JSON, HTML, Markdown, Plain Text, XLSX, and SQLite—via the `tabling.io` module.
+Tabling supports import and export in multiple file formats—CSV, TSV, JSON, HTML, Markdown, Plain Text, XLSX, SQLite—via the `tabling.io` module.
 
 ### Examples
 
