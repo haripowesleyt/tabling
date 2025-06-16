@@ -31,16 +31,18 @@ class Border:  # pylint: disable=too-many-instance-attributes
         )
         overline = underline = ""
         if self.top.char:
-            overline = (
-                self._Side("top-left", self.left.style, self.left.color).render(1)
-                + self.top.render(length)
-                + self._Side("top-right", self.right.style, self.right.color).render(1)
-            ) + "\n"
+            top_left = self._Side("top-left", self.left.style, self.left.color)
+            top_right = self._Side("top-right", self.right.style, self.right.color)
+            top_left.char = top_left.char or self.left.char
+            top_right.char = top_right.char or self.right.char
+            overline = top_left.render(1) + self.top.render(length) + top_right.render(1) + "\n"
         if self.bottom.char:
+            bottom_left = self._Side("bottom-left", self.left.style, self.left.color)
+            bottom_right = self._Side("bottom-right", self.right.style, self.right.color)
+            bottom_left.char = bottom_left.char or self.left.char
+            bottom_right.char = bottom_right.char or self.right.char
             underline = "\n" + (
-                self._Side("bottom-left", self.left.style, self.left.color).render(1)
-                + self.bottom.render(length)
-                + self._Side("bottom-right", self.right.style, self.right.color).render(1)
+                bottom_left.render(1) + self.bottom.render(length) + bottom_right.render(1)
             )
         return overline + inline + underline
 
